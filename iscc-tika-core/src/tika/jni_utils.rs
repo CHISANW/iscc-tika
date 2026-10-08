@@ -87,10 +87,9 @@ pub fn jni_jobject_to_string<'local>(
 ) -> ExtractResult<String> {
     let jstring_output = JString::from(jobject);
     let javastr_output = unsafe { env.get_string_unchecked(&jstring_output)? };
-    let output_str = javastr_output.to_string_lossy();
-    //let output_str = javastr_output.to_str().map_err(Error::Utf8Error)?;
+    let output_str: String = javastr_output.into();
 
-    Ok(output_str.to_string())
+    Ok(output_str)
 }
 
 /// Converts a Java String[] to a Rust Vec<String>

@@ -1,5 +1,14 @@
 ## Changelog
 
+## Unreleased
+
+- Fixed extracted text and metadata replacing every character outside the Basic Multilingual Plane —
+    emoji, CJK extension ideographs, musical symbols — with `U+FFFD`. JNI's `GetStringUTFChars`
+    returns modified UTF-8, which encodes those characters as a CESU-8 surrogate pair and `U+0000`
+    as an overlong `C0 80` sequence; both are ill-formed in standard UTF-8. The JNI string buffer
+    was decoded as plain UTF-8, so the surrogate pair was discarded. Java strings are now decoded as
+    modified UTF-8, keeping the lossy UTF-8 conversion as a fallback for malformed buffers.
+
 ## 0.6.0 - 2026-07-23
 
 - **Breaking:** OCR is now disabled by default. Previously, installing a Tesseract binary silently
